@@ -139,7 +139,6 @@ $(function() {
 			});
 
 			var val = $input.val();
-			console.log('show: input='+val);
 			var items = (val.length > 0) ? filter(data, val) : data;
 
 			renderList(items, val);
@@ -164,9 +163,7 @@ $(function() {
 		} // }}}
 
 		function currentSelection() { // {{{
-			console.log('currentSelection');
 			if (!isVisible()) return false;
-			console.log('visible');
 			var s = listItems && listItems.filter('.'+opts.activeClass)
 				.removeClass(opts.activeClass);
 			if (s && s.length) return $.data(s[0], 'sg');
@@ -192,7 +189,6 @@ $(function() {
 		} // }}}
 
 		function renderList(items, term) { // {{{
-			console.log('renderList');
 			$list.empty();
 			var i = 0;
 			for (; i < items.length && i < opts.limit ; i++) {
@@ -281,20 +277,22 @@ $(function() {
 		'html', 'css', 'XHTML', 'js', 'JavaScript', 'JSON'];
 	var sg = Suggestions(input, data);
 
-	input.keydown(function(e) {
+	input.keydown(function(event) {
+		var key = event.keyCode;
 		// Tab, space and comma adds the tag
-		switch (e.keyCode) {
+		switch (key) {
 			case 9: // tab
 			case 32: // space
 			case 188: // comma
-				e.preventDefault();
+				event.preventDefault();
 				if (input.val().length > 0) {
 					addTag(input.val());
 					input.val('');
 				}
+				break;
 		}
 		updateInputWidth();
-	}).click(updateInputWidth).blur(updateInputWidth);
+	}).click(updateInputWidth).blur(updateInputWidth).focus(updateInputWidth);
 
 	function updateInputWidth() {
 		// Update input box width to match contents
