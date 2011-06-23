@@ -153,7 +153,8 @@ $(function() {
 	}
 
 	function renderList(items) {
-		$list.empty()
+		console.log('renderList');
+		$list.empty();
 		$.each(items, function(i, item) {
 			return $('<li />').data('ac_value', item)
 				.append($('<a />').text(item)).appendTo($list);
@@ -173,9 +174,6 @@ $(function() {
 			top: offset.top + input.outerHeight() + 'px'
 		});
 
-		if (input.val() == prevValue && listItems)
-			return $list.show();
-		
 		var val = input.val();
 		var items = (val.length > 0) ? filter(data, val) : data;
 
