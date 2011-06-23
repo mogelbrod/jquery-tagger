@@ -80,6 +80,10 @@ $(function() {
 					break;
 
 				default:
+					// Prevent ctrl/alt/shift modifiers from resetting the timeout
+					if (lastKey > 15 && lastKey < 19)
+						return;
+
 					clearTimeout(timeout);
 					timeout = setTimeout(onChange, opts.delay);
 			}
@@ -115,7 +119,7 @@ $(function() {
 		// }}}
 
 		function onChange() { // {{{
-			if (lastKey > 8 && lastKey < 32)
+			if ((lastKey > 8 && lastKey < 32) || lastKey == KEY.DEL)
 				return sg.hide();
 
 			var current = input.val();
@@ -176,6 +180,7 @@ $(function() {
 			hide();
 			if (!sel) return false;
 			$input.val(sel).focus();
+			previousValue = sel;
 			return true;
 		} // }}}
 
@@ -294,7 +299,7 @@ $(function() {
 		updateInputWidth();
 	}).click(updateInputWidth).blur(updateInputWidth).focus(updateInputWidth);
 
-	function updateInputWidth() {
+	function updateInputWidth() { // {{{
 		// Update input box width to match contents
 		var width = ((input.val().length + 1)*1.1) + 'ex';
 		if (!$.browser.msie) {
@@ -304,5 +309,5 @@ $(function() {
 			wspan.remove();
 		}
 		input.css('width',  width);
-	}
+	} // }}}
 });
