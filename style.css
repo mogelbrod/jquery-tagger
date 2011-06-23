@@ -1,0 +1,73 @@
+h1, h2, h3 { margin: 18px 0 2px; line-height: 1.5; }
+p, ol, ul { margin: 2px 0 10px; }
+body {
+	margin: 50px auto;
+	width: 500px;
+	font: normal 12px/17px Arial, sans-serif;
+}
+form { overflow: auto; }
+.tag-container {
+	float: left;
+	padding: 2px;
+	width: 400px;
+	overflow: auto;
+	border: 1px solid #999;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	cursor: text;
+}
+.tag {
+	float: left;
+	padding: 1px 5px;
+	font: normal 12px/18px Tahoma, sans-serif;
+}
+a.tag {
+	margin: 1px 3px 1px 1px;
+	color: #eee;
+	background: #444;
+	border-radius: 4px;
+	text-decoration: none;
+}
+a.tag:hover { color: #fff; }
+a.tag span { margin-left: 2px; color: #999; }
+a.tag:hover span { color: #f66; }
+input.tag {
+	margin: 1px;
+	border: none;
+	background: none;
+	line-height: 18px;
+	height: 18px;
+}
+input.tag:focus { outline: none; }
+#submit {
+	float: left;
+	margin: 0 0 0 6px;
+	width: 70px;
+	font: bold 13px/16px Arial, sans-serif;
+	cursor: pointer;
+}
+
+ul.ac_list {
+	margin: 0;
+	padding: 1px;
+	background: #eee;
+	border: 1px solid #666;
+	list-style: none;
+	min-width: 100px;
+}
+ul.ac_list li a {
+	display: block;
+	padding: 1px 5px;
+	color: #000;
+	font: normal 12px/20px Tahoma, sans-serif;
+	cursor: pointer;
+}
+ul.ac_list li.active a {
+	background: #fff;
+}
+
+pre {
+	margin-top: 200px;
+	font: normal 12px/15px monospace;
+}

@@ -4,102 +4,8 @@
 		<title>Tag demo</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
-		<script type="text/javascript">
-			$(function() {
-				var input = $('#t');
-				var container = $('<div class="tag-container">').insertAfter(input)
-					.click(function() { input.focus(); });
-				input.appendTo(container);
-
-				function addTag(name) {
-					$('<a href="#" class="tag"></a>').text(name)
-						.append($(' <span>x</span>')).click(function() {
-							$(this).remove();
-							return false;
-						})
-						.append($('<input name="tags[]" type="hidden" />').val(name))
-						.insertBefore(input);
-				}
-
-				var existing = input.val().split(',');
-				if (existing) for (var i in existing)
-					addTag(existing[i]);
-				input.val('');
-
-				input.keydown(function(e) {
-					// Tab, space and comma adds the tag
-					if (e.keyCode == 9 || e.keyCode == 32 || e.keyCode == 188) {
-						e.preventDefault();
-						if (input.val().length > 0) {
-							addTag(input.val());
-							input.val('');
-						}
-					}
-					// Update input box width to match contents
-					var width = ((input.val().length + 1)*1.1) + 'ex';
-					if (!$.browser.msie) {
-						var wspan = $('<span class="tag" style="display:none">')
-							.text(input.val()).appendTo('body');
-						width = Math.max(wspan.width() + 15, 30) + 'px';
-						wspan.remove();
-					}
-					input.css('width',  width);
-				});
-
-				input.removeAttr('name');
-			});
-		</script>
-		<style type="text/css">
-			h1, h2, h3 { margin: 18px 0 2px; line-height: 1.5; }
-			p, ol, ul { margin: 2px 0 10px; }
-			body {
-				margin: 50px auto;
-				width: 500px;
-				font: normal 12px/17px Arial, sans-serif;
-			}
-			form { overflow: auto; }
-			.tag-container {
-				float: left;
-				padding: 2px;
-				width: 400px;
-				overflow: auto;
-				border: 1px solid #999;
-				-moz-border-radius: 5px;
-				-webkit-border-radius: 5px;
-				border-radius: 5px;
-				cursor: text;
-			}
-			.tag {
-				float: left;
-				padding: 1px 5px;
-				font: normal 12px/18px Tahoma, sans-serif;
-			}
-			a.tag {
-				margin: 1px 3px 1px 1px;
-				color: #eee;
-				background: #444;
-				border-radius: 4px;
-				text-decoration: none;
-			}
-			a.tag:hover { color: #fff; }
-			a.tag span { margin-left: 2px; color: #999; }
-			a.tag:hover span { color: #f66; }
-			input.tag {
-				margin: 1px;
-				border: none;
-				background: none;
-				line-height: 18px;
-				height: 18px;
-			}
-			input.tag:focus { outline: none; }
-			#submit {
-				float: left;
-				margin: 0 0 0 6px;
-				width: 70px;
-				font: bold 13px/16px Arial, sans-serif;
-				cursor: pointer;
-			}
-		</style>
+		<script type="text/javascript" src="script.js"></script>
+		<link rel="stylesheet" type="text/css" href="style.css" />
 	</head>
 	<body>
 		<form method="get">
@@ -113,5 +19,6 @@
 		<ul id="todo">
 			<li><a href="http://jqueryui.com/demos/autocomplete/">Autocomplete</a></li>
 		</ul>
+		<pre class="debug"></pre>
 	</body>
 </html>
