@@ -3,7 +3,7 @@ LAB
 
 Test lab for various JavaScript, HTML and CSS experiments.
 
-*[Live demo](http://lab.mogel.nu/)*
+**[Live demo](http://lab.mogel.nu/)**
 
 Author
 --------------------
