@@ -48,23 +48,35 @@ input.tag:focus { outline: none; }
 	cursor: pointer;
 }
 
-ul.ac_list {
+ul.sg_list {
 	margin: 0;
 	padding: 1px;
-	background: #eee;
+	background: #f6f6f6;
 	border: 1px solid #666;
 	list-style: none;
 	min-width: 100px;
 }
-ul.ac_list li a {
+ul.sg_list li a {
 	display: block;
 	padding: 1px 5px;
-	color: #000;
+	color: #333;
 	font: normal 12px/20px Tahoma, sans-serif;
 	cursor: pointer;
 }
-ul.ac_list li.active a {
-	background: #fff;
+ul.sg_list li.active a {
+	background: #ddd;
+}
+
+ul.sg_list li a strong {
+	color: #000;
+	font-weight: normal;
+	text-decoration: underline;
+}
+
+ul.sg_list li.more {
+	margin-top: 2px;
+	border-top: 1px dotted #666;
+	height: 2px;
 }
 
 pre {
