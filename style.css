@@ -1,11 +1,26 @@
 h1, h2, h3 { margin: 18px 0 2px; line-height: 1.5; }
 p, ol, ul { margin: 2px 0 10px; }
+
 body {
 	margin: 50px auto;
 	width: 500px;
 	font: normal 12px/17px Arial, sans-serif;
 }
-form { overflow: auto; }
+
+form {
+	margin-top: 20px;
+	overflow: auto;
+}
+
+#submit {
+	float: left;
+	margin: 0 0 0 6px;
+	width: 70px;
+	font: bold 13px/16px Arial, sans-serif;
+	cursor: pointer;
+}
+
+/* Tag input field */
 .tag-container {
 	float: left;
 	padding: 2px;
@@ -40,14 +55,8 @@ input.tag {
 	height: 18px;
 }
 input.tag:focus { outline: none; }
-#submit {
-	float: left;
-	margin: 0 0 0 6px;
-	width: 70px;
-	font: bold 13px/16px Arial, sans-serif;
-	cursor: pointer;
-}
 
+/* Suggestion list */
 ul.sg_list {
 	margin: 0;
 	padding: 1px;
@@ -77,9 +86,4 @@ ul.sg_list li.more {
 	margin-top: 2px;
 	border-top: 1px dotted #666;
 	height: 2px;
-}
-
-pre {
-	margin-top: 200px;
-	font: normal 12px/15px monospace;
 }
