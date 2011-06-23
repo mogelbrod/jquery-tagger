@@ -6,6 +6,9 @@ $(function() {
 			listClass: 'sg_list',
 			activeClass: 'active',
 			limit: 4,
+			selectFirst: true,
+			delay: 200,
+			matchCase: false,
 			highlight: function(value, term) {
 				return value.replace(
 					new RegExp('(?!<[^<>]*)(' + regexEscape(term) + ')(?![^<>]*>)', 'gi'),
@@ -21,7 +24,7 @@ $(function() {
 		var lastKey = -1;
 		var previousValue;
 
-		var selected = -1;
+		var active = -1;
 		var listItems;
 
 		var blockSubmit = false;
@@ -64,7 +67,7 @@ $(function() {
 				case KEY.UP:
 				case KEY.DOWN:
 					event.preventDefault();
-					moveSelected(lastKey == KEY.UP ? -1 : 1);
+					moveActive(lastKey == KEY.UP ? -1 : 1);
 					break;
 
 				case KEY.ESC:
@@ -78,7 +81,7 @@ $(function() {
 
 				default:
 					clearTimeout(timeout);
-					timeout = setTimeout(onChange, 100);
+					timeout = setTimeout(onChange, opts.delay);
 			}
 		}).bind('focus.sg', function(event) {
 			hasFocus = 1;
@@ -97,7 +100,7 @@ $(function() {
 		$list.mouseover(function(event) {
 			var target = targetLi(event);
 			if (!target) return;
-			selected = listItems.removeClass(opts.activeClass).index(target);
+			active = listItems.removeClass(opts.activeClass).index(target);
 			$(target).addClass(opts.activeClass);
 		}).click(function(event) {
 			listItems.removeClass(opts.activeClass);
@@ -141,14 +144,23 @@ $(function() {
 
 			renderList(items, val);
 
-			if (listItems.length) $list.show();
-			else $list.hide();
+			// Hide if no results
+			if (listItems.length < 1)
+				return $list.hide();
+
+			if (opts.selectFirst) {
+				listItems.slice(0, 1).addClass(opts.activeClass);
+				active = 0;
+			}
+
+			$list.show();
 		} // }}}
 
 		function hide() { // {{{
+			clearTimeout(timeout);
 			$list.hide();
 			listItems && listItems.removeClass(opts.activeClass);
-			selected = -1;
+			active = -1;
 		} // }}}
 
 		function currentSelection() { // {{{
@@ -157,7 +169,6 @@ $(function() {
 			console.log('visible');
 			var s = listItems && listItems.filter('.'+opts.activeClass)
 				.removeClass(opts.activeClass);
-			console.log([s, s.length, s.data(s[0], 'sg')]);
 			if (s && s.length) return $.data(s[0], 'sg');
 			return false;
 		} // }}}
@@ -197,7 +208,7 @@ $(function() {
 		} // }}}
 
 		function filter(array, term) { // {{{
-			var matcher = new RegExp(regexEscape(term));
+			var matcher = new RegExp(regexEscape(term), (opts.matchCase ? '' : 'i'));
 			return $.grep(array, function(value) {
 				return matcher.test(value.value || value);
 			});
@@ -207,21 +218,21 @@ $(function() {
 			return term.replace(/([\^\$\(\)\[\]\{\}\*\.\+\?\|\\])/gi, "\\$1");
 		} // }}}
 
-		function moveSelected(step) { // {{{
+		function moveActive(step) { // {{{
 			if (!isVisible())
 				return show();
 
 			var length = listItems.length;
 			if (length < 1) return;
 
-			selected += step;
-			if (selected < 0)
-				selected = length - 1;
-			else if (selected >= length)
-				selected = 0;
+			active += step;
+			if (active < 0)
+				active = length - 1;
+			else if (active >= length)
+				active = 0;
 
 			listItems.removeClass(opts.activeClass)
-				.slice(selected, selected+1).addClass(opts.activeClass);
+				.slice(active, active+1).addClass(opts.activeClass);
 		} // }}}
 
 		function isVisible() { // {{{
@@ -232,8 +243,8 @@ $(function() {
 		return {
 			show: show,
 			hide: hide,
-			prev: function() { moveSelected(-1); },
-			next: function() { moveSelected(1); },
+			prev: function() { moveActive(-1); },
+			next: function() { moveActive(1); },
 			selected: currentSelection,
 			visible: isVisible,
 			update: onChange
@@ -267,11 +278,10 @@ $(function() {
 	input.removeAttr('name');
 
 	var data = ['auto', 'complete', 'test', 'example', 'examples', 'code',
-		'html', 'css', 'xhtml', 'js', 'javascript', 'json'];
+		'html', 'css', 'XHTML', 'js', 'JavaScript', 'JSON'];
 	var sg = Suggestions(input, data);
 
 	input.keydown(function(e) {
-		console.log('tag keydown');
 		// Tab, space and comma adds the tag
 		switch (e.keyCode) {
 			case 9: // tab
