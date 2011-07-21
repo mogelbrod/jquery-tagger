@@ -264,6 +264,7 @@ $(function() {
 		$('<a href="#" class="tag"></a>').text(name)
 			.append($(' <span>x</span>')).click(function() {
 				$(this).remove();
+				input.focus();
 				return false;
 			})
 			.append($('<input name="tags[]" type="hidden" />').val(name))
