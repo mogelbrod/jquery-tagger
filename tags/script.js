@@ -222,6 +222,7 @@
         return false;
       this.input.val(selected).focus();
       this._previousValue = selected;
+      this.input.trigger(pluginName+'-accepted');
       return true;
     }, //}}}
 
@@ -350,6 +351,9 @@
         } // switch
       }).bind('keydown keypress focus blur change', function() {
         self._autosize();
+      }).bind('suggester-accepted', function() {
+        self.addTag(self.input.val());
+        self.input.val('');
       });
     }, //}}}
 
@@ -472,7 +476,7 @@
 
 $(function() {
   $('#t').suggester({
-    suggestions: ['example', 'tag', 'test', 'hej', 'CSS', 'HTML', 'Abra kadabra', 'Ha det bra'],
+    suggestions: ['example', 'tag', 'test', 'hej', 'CSS', 'HTML', 'Abra kadabra', 'Ha det bra']
   });
   $('#t').tagger();
 });
