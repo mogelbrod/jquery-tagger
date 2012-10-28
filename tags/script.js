@@ -279,7 +279,9 @@
       separator: ',',
       separatorKeyCode: 188, // no way of converting this?
       highlightClass: 'highlight',
-      highlightDuration: 2000
+      highlightDuration: 2000,
+      inputMaxWidth: 300,
+      inputMinWidth: 30
   };
 
   var KEY = { //{{{
@@ -312,6 +314,7 @@
 
       this.input.val('').removeAttr('name');
 
+      this._autosize();
       this._bindHandlers();
       this.reload();
     }, //}}}
@@ -344,6 +347,8 @@
               self.input.val(last);
             }
         } // switch
+      }).bind('keydown keypress focus blur change', function() {
+        self._autosize();
       });
     }, //}}}
 
@@ -407,6 +412,33 @@
 
     _updateInput: function() { //{{{
       this.hidden_input.val(this.tags.join(this.o.separator));
+    }, //}}}
+
+    _autosize: function() { //{{{
+      // Lazy initialization
+      if (this.widthTester == undefined) {
+        this.widthTester = $('<span />').css({
+          position: 'absolute',
+          top: -1000,
+          left: -1000,
+          width: 'auto',
+          fontSize: this.input.css('fontSize'),
+          fontFamily: this.input.css('fontFamily'),
+          fontWeight: this.input.css('fontWeight'),
+          letterSpacing: this.input.css('letterSpacing'),
+          whiteSpace: 'nowrap',
+          visibility: 'hidden'
+        }).appendTo('body');
+      }
+
+      // Escape input value
+      var val = 'mm' + this.input.val().replace(/&/g,'&amp;').replace(/\s/g,' ')
+        .replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      this.widthTester.html(val);
+
+      var width = Math.min(this.widthTester.width(), this.o.inputMaxWidth);
+      if (width < this.o.inputMinWidth) width = this.o.inputMinWidth;
+      this.input.width(width);
     }, //}}}
 
     _tagElements: function() { //{{{
