@@ -46,8 +46,9 @@ a.tag {
 	text-decoration: none;
 }
 a.tag:hover { color: #fff; }
-a.tag span { font-size: 11px; margin-left: 2px; color: #999; }
+a.tag span { font-size: 11px; margin-left: 2px; color: #888; }
 a.tag:hover span { color: #f33; }
+a.tag.highlight { background: #800; }
 input.tag {
 	margin: 1px;
 	border: none;

@@ -133,6 +133,7 @@
     update: function(currentText) { //{{{
       if (currentText == this._previousValue)
         return;
+      this._previousValue = currentText;
 
       // Array of matching terms
       var items = this.o.suggestions;
@@ -246,7 +247,7 @@
 
     _regexEscape: function(string) { //{{{
       return string.replace(/([\^\$\(\)\[\]\{\}\*\.\+\?\|\\])/gi, "\\$1");
-    }, //}}}
+    } //}}}
   };
 
   //{{{ Plugin wrapper around constructor which also allows public methods to be called.
@@ -276,7 +277,9 @@
       containerClass: 'tag-container',
       tagClass: 'tag',
       separator: ',',
-      separatorKeyCode: 188 // no way of converting this?
+      separatorKeyCode: 188, // no way of converting this?
+      highlightClass: 'highlight',
+      highlightDuration: 2000
   };
 
   var KEY = { //{{{
@@ -334,8 +337,9 @@
             // Remove and edit last tag when input is empty
             if (value.length < 1) {
               event.preventDefault();
+              if (self.tags.length < 1)
+                break;
               var last = self.tags[self.tags.length - 1];
-              console.log("removing " + last);
               self.removeTag(last);
               self.input.val(last);
             }
@@ -358,8 +362,10 @@
     }, //}}}
 
     addTag: function(name) { //{{{
-      if (this.hasTag(name))
+      if (this.hasTag(name)) {
+        this.highlightTag(name);
         return false;
+      }
       name = this._trim(name);
       var self = this;
       this.tags.push(name);
@@ -379,10 +385,8 @@
       if (!this.hasTag(name))
         return false;
       name = this._trim(name);
-      console.log(this.tags);
       tagIndex = $.inArray(name, this.tags);
       this.tags.splice(tagIndex, 1); // remove from tags array
-      console.log(this.tags);
       this._tagElements().eq(tagIndex).remove();
       this._updateInput();
       return true;
@@ -392,6 +396,13 @@
       this.tags = [];
       this._tagElements().remove();
       this._updateInput();
+    }, //}}}
+
+    highlightTag: function(name) { //{{{
+      var cssClass = this.o.highlightClass;
+      var target = this._tagElements().eq($.inArray(name, this.tags));
+      target.addClass(cssClass);
+      setTimeout(function() { target.removeClass(cssClass); }, this.o.highlightDuration);
     }, //}}}
 
     _updateInput: function() { //{{{
@@ -427,8 +438,8 @@
 //}}}
 
 $(function() {
-  $('#t').tagger();
   $('#t').suggester({
     suggestions: ['test', 'hej', 'CSS', 'HTML', 'Abra kadabra', 'Ha det bra'],
   });
+  $('#t').tagger();
 });
