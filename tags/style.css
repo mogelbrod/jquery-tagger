@@ -35,6 +35,7 @@ form {
 .tag {
 	float: left;
 	padding: 1px 5px;
+  height: 20px;
 	font: normal 12px/18px Tahoma, sans-serif;
 }
 a.tag {
@@ -51,13 +52,11 @@ input.tag {
 	margin: 1px;
 	border: none;
 	background: none;
-	line-height: 18px;
-	height: 18px;
 }
 input.tag:focus { outline: none; }
 
 /* Suggestion list */
-ul.sg_list {
+ul.suggestions {
 	margin: 0;
 	padding: 1px;
 	background: #f6f6f6;
@@ -65,24 +64,25 @@ ul.sg_list {
 	list-style: none;
 	min-width: 100px;
 }
-ul.sg_list li a {
+ul.suggestions li a {
 	display: block;
 	padding: 1px 5px;
 	color: #333;
 	font: normal 12px/20px Tahoma, sans-serif;
 	cursor: pointer;
 }
-ul.sg_list li.active a {
+ul.suggestions li.active a {
 	background: #ddd;
 }
 
-ul.sg_list li a strong {
+ul.suggestions li a em {
 	color: #000;
 	font-weight: normal;
+  font-style: normal;
 	text-decoration: underline;
 }
 
-ul.sg_list li.more {
+ul.suggestions li.more {
 	margin-top: 2px;
 	border-top: 1px dotted #666;
 	height: 2px;
