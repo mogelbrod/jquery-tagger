@@ -67,6 +67,7 @@
             return;
           case KEY.BACKSPACE:
           case KEY.DEL:
+            self._previousValue = null;
             if (self.input.val() != '')
               break;
           case KEY.ESC:
@@ -471,7 +472,7 @@
 
 $(function() {
   $('#t').suggester({
-    suggestions: ['test', 'hej', 'CSS', 'HTML', 'Abra kadabra', 'Ha det bra'],
+    suggestions: ['example', 'tag', 'test', 'hej', 'CSS', 'HTML', 'Abra kadabra', 'Ha det bra'],
   });
   $('#t').tagger();
 });
