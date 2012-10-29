@@ -120,7 +120,6 @@
       //}}}
     }, //}}}
 
-    // TODO: Funkar inte?
     data: function(data) { //{{{
       this.suggestions = data;
     }, //}}}

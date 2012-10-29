@@ -9,10 +9,14 @@
 		<script type="text/javascript" src="tagger.js"></script>
     <script type="text/javascript">
       $(function() {
-        $('#t').suggester({
-          data: ['example', 'tag', 'test', 'CSS', 'HTML', 'Multiple words', 'testing', 'another one']
+        $('#t').suggester({ // activate suggester plugin
+          data: ['initial', 'tags', 'which', 'are', 'not considered']
         });
-        $('#t').tagger();
+        $('#t').suggester('data', [ // Update suggestions list
+          'example', 'tag', 'test', 'CSS', 'HTML', 'Multiple words',
+          'testing', 'another one', 'yup'
+          ]);
+        $('#t').tagger(); // enable tagger plugin as well
       });
     </script>
 	</head>
