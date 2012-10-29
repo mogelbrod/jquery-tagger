@@ -2,15 +2,16 @@
   var pluginName = 'suggester';
 
   var defaults = {
-      data: [], // available suggestions
-      listClass: 'suggestions', // css class for dropdown
-      activeClass: 'active', // css class for selected item in dropdown
-      limit: 10, // maximum number of items visible at once
-      selectFirst: true, // automatically select first item when list is shown
-      popupDelay: 400, // delay before showing list
-      updateDelay: 100, // delay after keypress before list is updated
-      matchCase: false,
-      highlighting: '<em>$1</em>'
+      data: null,                     // available suggestions
+      dataAttribute: 'suggestions', // data attribute to load suggestions from
+      listClass: 'suggestions',     // css class for dropdown
+      activeClass: 'active',        // css class for selected item in dropdown
+      limit: 10,                    // maximum number of items visible at once
+      selectFirst: true,            // select first item when list is shown
+      popupDelay: 400,              // delay (ms) before showing list
+      updateDelay: 100,             // delay (ms) before updating list
+      matchCase: false,             // match text case for suggestions
+      highlighting: '<em>$1</em>'   // markup for matched text in list
   };
 
   var KEY = { //{{{
@@ -28,14 +29,6 @@
 
     this.o = $.extend({}, defaults, options);
 
-    // Extract suggestions data if present
-    if (this.o.data) {
-      this.suggestions = this.o.data;
-      delete this.o.data;
-    } else {
-      this.suggestions = [];
-    }
-
     this._name = pluginName;
     this._init();
   } //}}}
@@ -46,12 +39,26 @@
       this.list = $('<ul />').appendTo('body').hide()
         .addClass(this.o.listClass).css('position', 'absolute');
 
-      this._active = -1; // active item index
-      this._hasFocus = 0; // got focus?
-      this._previousValue = null; // previous input value
-      this._mouseDownOnList = false;
-      this._timeout = null;
-      this.items = null; // jQuery collection of <li> items in dropdown
+      // Array of available suggestions
+      this.suggestions = [];
+      // Suggestions from data-attribute
+      if (this.o.dataAttribute) {
+        var data = this.input.data(this.o.dataAttribute);
+        if ($.isArray(data))
+          this.suggestions = data;
+      }
+      // Suggestions from provided options
+      if (this.o.data) {
+        this.suggestions = this.o.data;
+        delete this.o.data;
+      }
+
+      this._active = -1;             // active item index
+      this._hasFocus = 0;            // got focus?
+      this._previousValue = null;    // previous input value
+      this._mouseDownOnList = false; // is mouse down on suggestions list?
+      this._timeout = null;          // active update/show timeout
+      this.items = null;             // jQuery collection of suggestion <li>s
 
       this._bindHandlers();
     }, //}}}
@@ -125,8 +132,8 @@
     }, //}}}
 
     show: function() { //{{{
-      this.update();
-      this.list.show();
+      if (this.update())
+        this.list.show();
     }, //}}}
 
     hide: function() { //{{{

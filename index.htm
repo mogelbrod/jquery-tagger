@@ -9,20 +9,24 @@
 		<script type="text/javascript" src="tagger.js"></script>
     <script type="text/javascript">
       $(function() {
+        $('#t').suggester(); // activate suggester plugin
+        /*
         $('#t').suggester({ // activate suggester plugin
           data: ['initial', 'tags', 'which', 'are', 'not considered']
         });
         $('#t').suggester('data', [ // Update suggestions list
           'example', 'tag', 'test', 'CSS', 'HTML', 'Multiple words',
           'testing', 'another one', 'yup'
-          ]);
+        ]);
+        */
         $('#t').tagger(); // enable tagger plugin as well
       });
     </script>
 	</head>
 	<body>
 		<form method="get">
-			<input type="text" name="tags" class="tag" id="t" value="example, tag" />
+      <input type="text" name="tags" class="tag" id="t" value="example, tag"
+        data-suggestions='["jQuery", "data", "suggestions"]' />
 			<input type="submit" id="submit" value="Submit" />
 		</form>
 	</body>
