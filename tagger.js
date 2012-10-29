@@ -2,14 +2,14 @@
   var pluginName = 'tagger';
 
   var defaults = {
-      containerClass: 'tag-container',
-      tagClass: 'tag',
-      separator: ',',
-      separatorKeyCode: 188, // no way of converting this?
-      highlightClass: 'highlight',
-      highlightDuration: 2000,
-      inputMaxWidth: 300,
-      inputMinWidth: 30
+      containerClass: 'tag-container', // tag for container div
+      tagClass: 'tag',                 // class for generated tags & input
+      separator: ',',                  // separator between tags
+      separatorKeyCode: 188,           // keyCode for separator, can't convert?
+      highlightClass: 'highlight',     // class to toggle when highlighting tag
+      highlightDuration: 2000,         // duration (ms) of highlighting
+      inputMaxWidth: 'parent',         // max width of input (px), or 'parent'
+      inputMinWidth: 30                // minimum width of input (px)
   };
 
   var KEY = { //{{{
@@ -75,7 +75,9 @@
               self.input.val(last);
             }
         } // switch
-      }).bind('keydown keypress focus blur change', function() {
+      }).bind('keydown', function(event) {
+        self._autosize(String.fromCharCode(event.which));
+      }).bind('keypress focus blur change', function() {
         self._autosize();
       }).bind('suggester-accepted', function() {
         self.addTag(self.input.val());
@@ -145,7 +147,7 @@
       this.hidden_input.val(this.tags.join(this.o.separator));
     }, //}}}
 
-    _autosize: function() { //{{{
+    _autosize: function(added) { //{{{
       // Lazy initialization
       if (this.widthTester == undefined) {
         this.widthTester = $('<span />').css({
@@ -160,14 +162,21 @@
           whiteSpace: 'nowrap',
           visibility: 'hidden'
         }).appendTo('body');
+
+        // Determine max width
+        var max = this.o.inputMaxWidth;
+        if (max == 'parent')
+          max = this.container.width() + this.input.width() - this.input.outerWidth();
+        this._maxWidth = max;
       }
 
-      // Escape input value
-      var val = 'mm' + this.input.val().replace(/&/g,'&amp;').replace(/\s/g,' ')
+      // Escape input value (with added string parameter if provided)
+      var val = 'mm' + ((added ? added : '') + this.input.val())
+        .replace(/&/g,'&amp;').replace(/\s/g,' ')
         .replace(/</g,'&lt;').replace(/>/g,'&gt;');
       this.widthTester.html(val);
 
-      var width = Math.min(this.widthTester.width(), this.o.inputMaxWidth);
+      var width = Math.min(this.widthTester.width(), this._maxWidth);
       if (width < this.o.inputMinWidth) width = this.o.inputMinWidth;
       this.input.width(width);
     }, //}}}
