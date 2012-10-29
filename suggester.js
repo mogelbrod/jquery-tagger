@@ -142,7 +142,6 @@
       if (!this.isVisible())
         return false;
       this.list.hide();
-      this._active = -1;
       return true;
     }, //}}}
 
@@ -183,7 +182,6 @@
 
       if (i < 1) {
         this.list.hide();
-        this._active = -1;
         return false;
       }
 
