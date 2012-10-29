@@ -7,7 +7,8 @@
       activeClass: 'active', // css class for selected item in dropdown
       limit: 10, // maximum number of items visible at once
       selectFirst: true, // automatically select first item when list is shown
-      delay: 100, // delay after keypress before list is updated
+      popupDelay: 400, // delay before showing list
+      updateDelay: 100, // delay after keypress before list is updated
       matchCase: false,
       highlighting: '<em>$1</em>'
   };
@@ -29,7 +30,7 @@
 
     // Extract suggestions data if present
     if (this.o.data) {
-      this._data = this.o.data;
+      this.suggestions = this.o.data;
       delete this.o.data;
     } else {
       this.suggestions = [];
@@ -89,7 +90,7 @@
               return;
         } // switch
 
-        self.resetTimeout();
+        self.showOrUpdate();
       }).bind('focus.'+pluginName, function(event) {
         self._hasFocus = 1;
       }).bind('click.'+pluginName, function(event) {
@@ -121,8 +122,7 @@
 
     // TODO: Funkar inte?
     data: function(data) { //{{{
-      this._data = data;
-      console.log(this._data);
+      this.suggestions = data;
     }, //}}}
 
     show: function() { //{{{
@@ -155,7 +155,7 @@
       this._previousValue = currentText;
 
       // Array of matching terms
-      var items = this._data;
+      var items = this.suggestions;
       if (currentText.length > 0)
         items = this._matchingItems(items, currentText);
 
@@ -201,10 +201,13 @@
       return this.list.is(':visible');
     }, //}}}
 
-    resetTimeout: function() { //{{{
+    showOrUpdate: function() { //{{{
       var self = this;
       clearTimeout(this._timeout);
-      this._timeout = setTimeout(function() { self.update(); }, this.o.delay);
+      if (this.isVisible())
+        this._timeout = setTimeout(function() { self.update(); }, this.o.updateDelay);
+      else
+        this._timeout = setTimeout(function() { self.show(); }, this.o.popupDelay);
     }, //}}}
 
     _selectActive: function(index) { //{{{
