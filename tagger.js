@@ -29,7 +29,7 @@
     _init: function() { //{{{
       var self = this;
 
-      this.input.addClass(pluginName)
+      this.input.addClass(this.o.tagClass)
         .wrap($('<div />').addClass(this.o.containerClass));
       this.container = this.input.parent();
       this.container.click(function() { self.input.focus(); });
