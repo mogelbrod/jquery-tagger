@@ -38,7 +38,7 @@ form {
   height: 20px;
 	font: normal 12px/18px Tahoma, sans-serif;
 }
-a.tag {
+a.tag, .tag-container .placeholder {
 	margin: 1px 3px 1px 1px;
 	color: #eee;
 	background: #444;
@@ -55,6 +55,9 @@ input.tag {
 	background: none;
 }
 input.tag:focus { outline: none; }
+.tag-container .placeholder { float: left; background-color: #ccc; }
+.tag-container a.tag { cursor: move; }
+.tag.dragging { opacity: 0.8; }
 
 /* Suggestion list */
 ul.suggestions {
