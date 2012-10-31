@@ -168,6 +168,10 @@
           dt.setData('text/plain', $item.data('name'));
 
           self._dragElement = $item.addClass(self.o.dragClass);
+
+          self._dragPlaceholder.width(self._dragElement.outerWidth());
+          self._dragPlaceholder.height(self._dragElement.outerHeight());
+
           // Hack: hide original tag, but show the ghost one being dragged
           setTimeout(function() { $item.hide(); }, 10);
         }).bind('dragend.'+pluginName, function(event) {
@@ -191,9 +195,6 @@
         if (!self._dragElement)
           return true;
 
-        self._dragPlaceholder.width(self._dragElement.outerWidth());
-        self._dragPlaceholder.height(self._dragElement.outerHeight());
-
         if (event.type == 'drop') {
           event.stopPropagation();
           self._dragPlaceholder.show().after(self._dragElement);
@@ -205,12 +206,10 @@
         event.originalEvent.dataTransfer.dropEffect = 'move';
 
         if (self.tagElements().is($item)) {
-          $item[self._dragPlaceholder.index() < $item.index() ?
+          $item[self._dragPlaceholder.index() <= $item.index() ?
             'after' : 'before'](self._dragPlaceholder.show());
         } else if ($item.is(self.input)) {
           self._dragPlaceholder.insertBefore($item);
-        } else if (!self._dragPlaceholder.is($item)) {
-          self._dragPlaceholder.appendTo($item);
         }
         return false;
       });
