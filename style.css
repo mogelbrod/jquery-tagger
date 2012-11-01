@@ -56,7 +56,7 @@ input.tag {
 }
 input.tag:focus { outline: none; }
 .tag-container .placeholder { float: left; background-color: #ccc; }
-.tag-container a.tag { cursor: move; }
+.tag-container a.tag[draggable] { cursor: move; }
 .tag.dragging { opacity: 0.8; }
 
 /* Suggestion list */

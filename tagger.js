@@ -9,7 +9,8 @@
       highlightClass: 'highlight',     // class to toggle when highlighting tag
       highlightDuration: 2000,         // duration (ms) of highlighting
       inputMaxWidth: 'parent',         // max width of input (px), or 'parent'
-      inputMinWidth: 30,                // minimum width of input (px)
+      inputMinWidth: 30,               // minimum width of input (px)
+      allowDragging: true,             // allow tag reordering by dragging?
       dragClass: 'dragging',           // css class for items being dragged
       dragPlaceholder: $('<span class="placeholder">')
   };
@@ -44,11 +45,13 @@
 
       this.tags = []; // array of tags synchronized with visible list
 
-      this._dragElement = null; // tag element being dragged
-      this._dragPlaceholder = this.o.dragPlaceholder
-        .hide().insertBefore(this.input);
-      this._enableDragging(this._dragPlaceholder, true);
-      this._enableDragging(this.input, true);
+      if (this.o.allowDragging) {
+        this._dragElement = null; // tag element being dragged
+        this._dragPlaceholder = this.o.dragPlaceholder
+          .hide().insertBefore(this.input);
+        this._enableDragging(this._dragPlaceholder, true);
+        this._enableDragging(this.input, true);
+      }
 
       this._autosize();
       this._bindHandlers();
@@ -124,7 +127,8 @@
           self.input.focus();
           return false;
         }).insertBefore(self.input);
-      this._enableDragging($elem);
+      if (this.o.allowDragging)
+        this._enableDragging($elem);
       this._syncInput();
       return true;
     }, //}}}
